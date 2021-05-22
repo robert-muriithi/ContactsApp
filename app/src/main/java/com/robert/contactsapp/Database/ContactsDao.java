@@ -9,9 +9,10 @@ import java.util.List;
 @Dao
 public interface ContactsDao {
 
-    @Query("SELECT * FROM FamilyEntity")
 
-    List<ContactsDao> getAllContacts();
+    @Query("SELECT * FROM familyEntity")
+
+    List<FamilyEntity> getAllContacts();
 
     @Insert
     void addContacts (FamilyEntity... familyEntities);

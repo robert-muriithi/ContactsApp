@@ -16,6 +16,7 @@ import com.robert.contactsapp.Database.ContactsDao;
 import com.robert.contactsapp.Database.ContactsDatabase;
 import com.robert.contactsapp.Database.FamilyEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,6 +24,7 @@ public class ContactsListActivity extends AppCompatActivity {
 
     FloatingActionButton FAB;
     ContactsRecyclerAdapter adapter;
+    List<FamilyEntity> list = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,17 +37,16 @@ public class ContactsListActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(getApplicationContext(),AddContactsActivity.class),100);
-                //startActivity(new Intent(getApplicationContext(),AddContactsActivity.class));
+                //startActivityForResult(new Intent(getApplicationContext(),AddContactsActivity.class),100);
+                startActivity(new Intent(getApplicationContext(),AddContactsActivity.class));
             }
         });
 
         initializeRecycler();
-        loadContacts();
+       loadContacts();
 
     }
 
@@ -58,19 +59,19 @@ public class ContactsListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 100){
 
             loadContacts();
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
+    }*/
 
     private void loadContacts() {
-        ContactsDatabase database = ContactsDatabase.getUserDB(this.getApplicationContext());
-        List<ContactsDao> list = database.userDao().getAllContacts();
-       // adapter.setList(list);
+         ContactsDatabase database = ContactsDatabase.getUserDB(this);
+        list = database.userDao().getAllContacts();
+        adapter = new ContactsRecyclerAdapter(ContactsListActivity.this, list);
 
     }
 
