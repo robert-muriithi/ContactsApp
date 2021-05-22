@@ -15,11 +15,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initializeRecyclerview();
+
+
     }
 
     private void initializeRecyclerview() {
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        ArrayList <String> contacts = new ArrayList<>();
+        ArrayList<String> contacts = new ArrayList<>();
 
         contacts.add("Family");
         contacts.add("Friends");

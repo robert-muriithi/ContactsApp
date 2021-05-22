@@ -1,15 +1,14 @@
 package com.robert.contactsapp;
 
-import androidx.annotation.Nullable;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.robert.contactsapp.Database.ContactsDao;
@@ -25,11 +24,18 @@ public class ContactsListActivity extends AppCompatActivity {
     FloatingActionButton FAB;
     ContactsRecyclerAdapter adapter;
     List<FamilyEntity> list = new ArrayList<>();
+    private static final String TAG = "ContactsListActivity";
+
+    ContactsDao contactsDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
-        FAB =findViewById(R.id.fAB);
+        FAB = findViewById(R.id.fAB);
+
+        ContactsDatabase database = ContactsDatabase.getUserDB(getApplicationContext());
+        contactsDao = database.userDao();
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("CONTACT_CATEGORY");
@@ -40,13 +46,12 @@ public class ContactsListActivity extends AppCompatActivity {
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivityForResult(new Intent(getApplicationContext(),AddContactsActivity.class),100);
-                startActivity(new Intent(getApplicationContext(),AddContactsActivity.class));
+                startActivity(new Intent(getApplicationContext(), AddContactsActivity.class));
             }
         });
 
+        loadContacts();
         initializeRecycler();
-       loadContacts();
 
     }
 
@@ -59,19 +64,10 @@ public class ContactsListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 100){
-
-            loadContacts();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }*/
-
     private void loadContacts() {
-         ContactsDatabase database = ContactsDatabase.getUserDB(this);
-        list = database.userDao().getAllContacts();
-        adapter = new ContactsRecyclerAdapter(ContactsListActivity.this, list);
+        list = contactsDao.getAllContacts();
+        Log.d(TAG, "loadContacts: " + list.get(0).getContactName());
+        adapter = new ContactsRecyclerAdapter(list);
 
     }
 

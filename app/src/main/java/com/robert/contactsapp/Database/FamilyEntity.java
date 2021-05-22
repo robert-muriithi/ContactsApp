@@ -9,14 +9,21 @@ import java.io.Serializable;
 @Entity(tableName = "familyEntity")
 public class FamilyEntity implements Serializable {
 
+    public FamilyEntity(int id, String contactName, String phoneNumber) {
+        this.id = id;
+        this.contactName = contactName;
+        this.phoneNumber = phoneNumber;
+    }
+
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public int id = 0;
 
     @ColumnInfo(name = "Name")
     String contactName;
 
     @ColumnInfo(name = "Phone Number")
     String phoneNumber;
+
 
     public int getId() {
         return id;
